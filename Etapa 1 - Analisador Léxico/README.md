@@ -1,5 +1,5 @@
-# projeto-compilador
-Projeto de compiladores para a disciplina de Compiladores - INF01147
+# Etapa 1 - Analisador Léxico
+Parte 1 do projeto de compilador
 
 # How to build
  Open terminal and run make etapa1

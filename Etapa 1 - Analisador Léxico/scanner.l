@@ -44,7 +44,10 @@ space [\t\n\r\s]
 ";" { return ';'; }
 
 ([a-z]|_)([a-z]|[0-9]|_)* { return TK_IDENTIFICADOR; }
-
+[0-9]+ {return TK_LIT_INT;}
+[0-9]*\.[0-9]+ {return TK_LIT_FLOAT;}
+"false" { return TK_LIT_FALSE; }
+"true" { return TK_LIT_TRUE; }
 
 
 

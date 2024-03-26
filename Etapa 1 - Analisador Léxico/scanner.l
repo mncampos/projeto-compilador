@@ -1,23 +1,55 @@
 %{
-/* C code to include before the rules section */
+#include "tokens.h"
 %}
 
-/* Definitions Section */
-%option noyywrap yylineno
 
-/* Rules Section */
+%option yylineno
+%option noyywrap
+space [\t\n\r\s]
+
+
 %%
-/* Regular expressions and corresponding actions */
 
+{space} {}
+
+"int" {return TK_PR_INT; }
+"float" { return TK_PR_FLOAT; }
+"bool" { return TK_PR_BOOL; }
+"if" { return TK_PR_IF; }
+"else" { return TK_PR_ELSE; }
+"while" { return TK_PR_WHILE; }
+"return" { return TK_PR_RETURN; }
+
+"<=" { return TK_OC_LE; }
+">=" { return TK_OC_GE; }
+"==" { return TK_OC_EQ; }
+"!=" { return TK_OC_NE; }
+"&" { return TK_OC_AND; }
+"|" { return TK_OC_OR; }
+
+"!" { return '!'; }
+"*" { return '*'; }
+"/" { return '/'; }
+"%" { return '%'; }
+"+" { return '+'; }
+"-" { return '-'; }
+"<" { return '<'; }
+">" { return '>'; }
+"{" { return '{'; }
+"}" { return '}'; }
+"(" { return '('; }
+")" { return ')'; }
+"=" { return '='; }
+"," { return ','; }
+";" { return ';'; }
+
+([a-z]|_)([a-z]|[0-9]|_)* { return TK_IDENTIFICADOR; }
+
+
+
+
+. {return TK_ERRO;}
 %%
-
-/* C code section */
-int main(int argc, char *argv[]) {
-    /* Code for handling command line arguments and calling yylex() */
-    return 0;
-}
-
-/* Additional C code and functions */
 
 int get_line_number(void) {
     return yylineno;

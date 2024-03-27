@@ -3,6 +3,8 @@ LIBS=-lfl
 SCANNER = scanner.l
 OBJ = lex.yy.o main.o
 
+all: etapa1
+
 %.o: %.c
 	$(CC) -c -o $@ $< $(CFLAGS)
 

@@ -19,6 +19,8 @@ space [\t\n\r\s]
 "else" { return TK_PR_ELSE; }
 "while" { return TK_PR_WHILE; }
 "return" { return TK_PR_RETURN; }
+"false" { return TK_LIT_FALSE; }
+"true" { return TK_LIT_TRUE; }
 
 "<=" { return TK_OC_LE; }
 ">=" { return TK_OC_GE; }
@@ -46,8 +48,7 @@ space [\t\n\r\s]
 ([a-z]|_)([a-z]|[0-9]|_)* { return TK_IDENTIFICADOR; }
 [0-9]+ {return TK_LIT_INT;}
 [0-9]*\.[0-9]+ {return TK_LIT_FLOAT;}
-"false" { return TK_LIT_FALSE; }
-"true" { return TK_LIT_TRUE; }
+
 
 
 

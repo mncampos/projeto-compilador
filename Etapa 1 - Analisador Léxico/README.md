@@ -6,7 +6,7 @@ Parte 1 do projeto de compilador
 
 ## Features
 - [x] Line Count
-- [ ] Ignore comments
+- [x] Ignore comments
 - [x] Lexical Errors
 - [x] Reserved Words
 - [x] Special Characters

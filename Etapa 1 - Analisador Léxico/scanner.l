@@ -5,12 +5,16 @@
 
 %option yylineno
 %option noyywrap
-space [\t\n\r\s]
-
+%x COMMENT
 
 %%
+"/*" {BEGIN(COMMENT);}
+<COMMENT>"*/" {BEGIN(INITIAL);}
+<COMMENT>\n {}
+<COMMENT>. {}
 
-{space} {}
+(\/\/).* {}
+[ \t]+   {}
 
 "int" {return TK_PR_INT; }
 "float" { return TK_PR_FLOAT; }

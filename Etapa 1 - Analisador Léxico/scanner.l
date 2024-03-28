@@ -8,13 +8,20 @@
 %x COMMENT
 
 %%
+
+    /* Regra do comentário multi-linha, onde entramos no estado COMMENT caso um /* seja identificado, ignorando tudo até encontrar um /*, voltando assim ao estado inicial */
+
 "/*" {BEGIN(COMMENT);}
 <COMMENT>"*/" {BEGIN(INITIAL);}
 <COMMENT>\n {}
 <COMMENT>. {}
 
+    /* Regra do comentário one liner (//) e de ignorar espaços */
 (\/\/).* {}
 [ \t]+   {}
+
+
+    /* Regras das palavras reservadas, caracteres especiais e operadores compostos e dos literais true e false*/
 
 "int" {return TK_PR_INT; }
 "float" { return TK_PR_FLOAT; }
@@ -49,7 +56,10 @@
 "," { return ','; }
 ";" { return ';'; }
 
+    /* Regra dos identificadores, começando com um caracter minúsculo ou underline e seguido de dígitos ou repetições opcionalmente */
 ([a-z]|_)([a-z]|[0-9]|_)* { return TK_IDENTIFICADOR; }
+
+    /*Regras dos Literais */
 [0-9]+ {return TK_LIT_INT;}
 [0-9]*\.[0-9]+ {return TK_LIT_FLOAT;}
 

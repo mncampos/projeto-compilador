@@ -2,8 +2,11 @@
 /* Mateus Nunes Campos - 00268613  */
 
 %{
-#include "tokens.h"
+#include "y.tab.c"
 %}
+
+SPECIAL_CHAR [!*/%+-<>{}()=,;]
+WHITESPACE [\t\r\n]+
 
 %option yylineno
 %option noyywrap
@@ -18,9 +21,8 @@
 <COMMENT>\n { }
 <COMMENT>. { }
 
-    /* Regra do comentário one liner (//) e de ignorar espaços */
+    /* Regra do comentário one liner */
 (\/\/).* { }
-[ \t]+   { }
 
     /* Regras das palavras reservadas, caracteres especiais e operadores compostos e dos literais true e false*/
 
@@ -41,21 +43,8 @@
 "&" { return TK_OC_AND; }
 "|" { return TK_OC_OR; }
 
-"!" { return '!'; }
-"*" { return '*'; }
-"/" { return '/'; }
-"%" { return '%'; }
-"+" { return '+'; }
-"-" { return '-'; }
-"<" { return '<'; }
-">" { return '>'; }
-"{" { return '{'; }
-"}" { return '}'; }
-"(" { return '('; }
-")" { return ')'; }
-"=" { return '='; }
-"," { return ','; }
-";" { return ';'; }
+{SPECIAL_CHAR}  { return yytext[0]; }
+{WHITESPACE} { }
 
     /* Regra dos identificadores, começando com um caracter minúsculo ou underline e seguido de dígitos ou repetições opcionalmente */
 ([a-z]|_)([a-z]|[0-9]|_)* { return TK_IDENTIFICADOR; }

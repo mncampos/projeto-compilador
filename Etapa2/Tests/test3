@@ -1,0 +1,6 @@
+//CORRETO
+(int a; int b)|int/add {
+    int resultado,
+    resultado = a + b,
+    return resultado,
+  }

@@ -48,7 +48,7 @@ literal: TK_LIT_INT | TK_LIT_FLOAT | TK_LIT_TRUE | TK_LIT_FALSE;
 
 /* Definição de Funções */
 function: header body;
-header: params TK_OC_OR type '\\' TK_IDENTIFICADOR ;
+header: params TK_OC_OR type '/' TK_IDENTIFICADOR ;
 params: '(' params_list ')' | '(' ')';
 params_list: type TK_IDENTIFICADOR ';' params_list | type TK_IDENTIFICADOR;
 body: '{' cmd_block '}' | '{' '}';

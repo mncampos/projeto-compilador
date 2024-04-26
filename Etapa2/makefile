@@ -22,4 +22,4 @@ build: $(OBJ)
 
 
 clean:
-			rm -f $(OBJ) lex.yy.c parser.tab.c parser.tab.h parser.output etapa2 
+			rm -f $(OBJ) lex.yy.c parser.tab.c parser.tab.h parser.output etapa2 lex.yy.o 

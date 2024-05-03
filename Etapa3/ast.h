@@ -1,15 +1,7 @@
 /*
- GRUPO W
+GRUPO W
 Lucas Guaitanelli da Silveira - 00208695
- Mateus Nunes Campos - 00268613  */
-
-
- typedef struct Lexic
-{
-    int line_num;
-    int token_type;
-    char *label;
-} Lexic;
+Mateus Nunes Campos - 00268613  */
 
 enum allowed_lexic_types {
     LEX_IDENTIFIER,
@@ -17,6 +9,12 @@ enum allowed_lexic_types {
     LEX_LIT_BOOL,
     LEX_LIT_FLOAT
 };
+
+ typedef struct Lexic {
+    int line_num;
+    int token_type;
+    char *label;
+} Lexic;
 
 Lexic* newLex(int line_num, int token_type, char* token_value);
 

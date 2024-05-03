@@ -10,14 +10,14 @@ int yylex(void);
 void yyerror (char const *s);
 extern int get_line_number();
 extern char *yytext;
-extern void *arvore;
+extern void *ast;
 %}
 
 %define parse.error verbose
 
 %union {
-    Lexic* lex_value;
-    Tree* node;
+  struct Lexic* lex_value;
+  struct Tree* node;
 }
 
 %token TK_PR_INT
@@ -43,6 +43,7 @@ extern void *arvore;
 /*Ações para construção de AST */
 %type<node> program
 %type<node> element_list
+%type<node> func_or_global
 %type<node> global_var
 %type<node> id_list
 %type<node> type
@@ -77,28 +78,80 @@ extern void *arvore;
 %%
 
 /* Programa principal */
+program: 
+	element_list { ast = $1; } | { ast = NULL; };
 
-program: element_list {arvore = $1; } | {arvore = NULL; };
-element_list: element_list function | element_list global_var | function | global_var;
+element_list: 
+	func_or_global element_list {
+		if($1 == NULL) { $$ = $2; } 
+		else { 
+			if($2 != NULL) { addChild($1, $2); }
+			else { $$ = $1; }
+		}
+  } |
+	func_or_global {
+		if($1 != NULL) { $$ = $1; } 
+		else { $$ = NULL; }
+	} ;
 
+func_or_global: 
+	function { $$ = $1; } | 
+	global_var { $$ = NULL; } ;
 
 /* Declaração de Variável Global, Tipos e Literais */
+global_var: 
+	type id_list ','; 
 
-global_var : type id_list ','; 
-id_list: TK_IDENTIFICADOR ';' id_list | TK_IDENTIFICADOR;
-type: TK_PR_BOOL | TK_PR_FLOAT | TK_PR_INT;
-literal: TK_LIT_INT | TK_LIT_FLOAT | TK_LIT_TRUE | TK_LIT_FALSE;
+id_list:
+	TK_IDENTIFICADOR ';' id_list |
+	TK_IDENTIFICADOR;
+
+type: 
+	TK_PR_BOOL | 
+	TK_PR_FLOAT |
+	TK_PR_INT;
+
+literal: 
+	TK_LIT_INT { $$ = $1; } |
+	TK_LIT_FLOAT { $$ = $1; } |
+	TK_LIT_TRUE { $$ = $1; } |
+	TK_LIT_FALSE { $$ = $1; };
 
 /* Definição de Funções */
-function: header body;
-header: params TK_OC_OR type '/' TK_IDENTIFICADOR ;
+function: 
+	header 
+	body {
+		$$ = $1;   
+		addChild($$, $2); 
+	};
+
+header: 
+	params 
+	TK_OC_OR 
+	type { $$ = newLexNode($1); }
+	'/'
+	TK_IDENTIFICADOR;
+
 params: '(' params_list ')' | '(' ')';
 params_list: type TK_IDENTIFICADOR ';' params_list | type TK_IDENTIFICADOR;
-body: '{' cmd_block '}' | '{' '}';
+
+body: 
+	'{' cmd_block '}' { $$ = $2; } |
+	'{' '}' { $$ = NULL; };
+
 
 /* Bloco de Comandos e Comandos Simples*/
-cmd_block: cmd_block cmd | cmd;
-cmd: var ',' | assignment ',' | func_call ',' | return ',' | ctrl_flow ',' | body ',' ;
+cmd_block: 
+	cmd_block cmd |
+	cmd;
+
+cmd: 
+	var ',' { $$ = $1; } |
+	assignment ',' { $$ = $1; }  |
+	func_call ',' { $$ = $1; }  |
+	return ',' | { $$ = $1; } 
+	ctrl_flow ',' { $$ = $1; }  |
+	body ',' { $$ = $1; }  ;
 
 /* Variável */
 var: type var_names
@@ -130,8 +183,10 @@ exp6: exp6 '*' exp7 | exp6 '/' exp7 | exp6 '%' exp7 | exp7;
 exp7: '!' exp8 | '-' exp8 | exp8 ;
 exp8: op | '(' exp ')';
 
-op : TK_IDENTIFICADOR | literal | function;
-
+op : 
+	TK_IDENTIFICADOR { $$ = newLexNode($1); } |
+	literal { $$ = newLexNode($1); } |
+	function { $$ = NULL; };
 
 %%
 

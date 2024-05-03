@@ -12,18 +12,18 @@
 
 %%
 
-    /* Regra do comentário multi-linha, onde entramos no estado COMMENT caso um /* seja identificado, ignorando tudo até encontrar um /*, voltando assim ao estado inicial */
+  /* Regra do comentário multi-linha, onde entramos no estado COMMENT caso um /* seja identificado, ignorando tudo até encontrar um /*, voltando assim ao estado inicial */
 
 "/*" { BEGIN(COMMENT); }
 <COMMENT>"*/" { BEGIN(INITIAL); }
 <COMMENT>\n { }
 <COMMENT>. { }
 
-    /* Regra do comentário one liner (//) e de ignorar espaços */
+  /* Regra do comentário one liner (//) e de ignorar espaços */
 (\/\/).* { }
 [ \t]+   { }
 
-    /* Regras das palavras reservadas, caracteres especiais e operadores compostos e dos literais true e false*/
+  /* Regras das palavras reservadas, caracteres especiais e operadores compostos e dos literais true e false*/
 
 "int" {return TK_PR_INT; }
 "float" { return TK_PR_FLOAT; }
@@ -34,11 +34,11 @@
 "return" { return TK_PR_RETURN; }
 
 "false" {
-    yylval.lex_value = newLex(yylineno, LEX_LIT_BOOL, strdup(yytext));
-    return TK_LIT_FALSE; }
+  yylval.lex_value = newLex(yylineno, LEX_LIT_BOOL, strdup(yytext));
+  return TK_LIT_FALSE; }
 "true" { 
-    yylval.lex_value = newLex(yylineno, LEX_LIT_BOOL, strdup(yytext));
-    return TK_LIT_TRUE; }
+  yylval.lex_value = newLex(yylineno, LEX_LIT_BOOL, strdup(yytext));
+  return TK_LIT_TRUE; }
 
 "<=" { return TK_OC_LE; }
 ">=" { return TK_OC_GE; }
@@ -63,20 +63,20 @@
 "," { return ','; }
 ";" { return ';'; }
 
-    /* Regra dos identificadores, começando com um caracter minúsculo ou underline e seguido de dígitos ou repetições opcionalmente */
+  /* Regra dos identificadores, começando com um caracter minúsculo ou underline e seguido de dígitos ou repetições opcionalmente */
 ([a-z]|_)([a-z]|[0-9]|_)* { 
-    yylval.lex_value = newLex(yylineno, LEX_IDENTIFIER, strdup(yytext));
-    return TK_IDENTIFICADOR; }
+  yylval.lex_value = newLex(yylineno, LEX_IDENTIFIER, strdup(yytext));
+  return TK_IDENTIFICADOR; }
 
-    /*Regras dos Literais */
+  /*Regras dos Literais */
 [0-9]+ { 
-    yylval.lex_value = newLex(yylineno, LEX_LIT_INT, strdup(yytext));
-    return TK_LIT_INT; }
+  yylval.lex_value = newLex(yylineno, LEX_LIT_INT, strdup(yytext));
+  return TK_LIT_INT; }
 
 
 [0-9]*\.[0-9]+ { 
-    yylval.lex_value = newLex(yylineno, LEX_LIT_FLOAT, strdup(yytext));
-    return TK_LIT_FLOAT; }
+  yylval.lex_value = newLex(yylineno, LEX_LIT_FLOAT, strdup(yytext));
+  return TK_LIT_FLOAT; }
 
 \n { }
 
@@ -85,5 +85,5 @@
 %%
 
 int get_line_number(void) {
-    return yylineno;
+  return yylineno;
 }
